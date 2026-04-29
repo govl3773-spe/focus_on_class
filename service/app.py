@@ -1,5 +1,4 @@
 
-# • 프로젝트 루트에서 실행하면 됩니다.
 
 # cd C:\Projects\focus_on_class
 # uv pip install -r service\requirements-service.txt
@@ -37,7 +36,7 @@ MODEL_DIR = PROJECT_ROOT / "models"
 MP_MODEL_DIR = PROJECT_ROOT / "mp_model"
 DB_PATH = BASE_DIR / "attention_logs.db"
 
-REALTIME_MODEL_NAME = "resnet18"
+REALTIME_MODEL_NAME = "efficientnet_b0"
 CAMERA_INDEX = 0
 FRAME_WIDTH = 960
 FRAME_HEIGHT = 720
