@@ -1,4 +1,0 @@
-﻿model_name,best_epoch,best_val_loss,best_val_acc,best_val_f1,param_count,train_time_sec,val_inference_ms_per_image,attentive_weight,checkpoint_path,history_path
-resnet18,19,0.5175270239512125,0.8362573099415205,0.8285648547598504,11178051,131.56467240001075,0.7168318741605617,1.4733958721160887,models\three_model_compare_weighted\resnet18_best.pt,models\three_model_compare_weighted\resnet18_history.csv
-mobilenet_v3_large,19,0.5178716465046531,0.8304093567251462,0.826492678372162,4205875,85.83679289999418,0.6365643755998462,1.4733958721160887,models\three_model_compare_weighted\mobilenet_v3_large_best.pt,models\three_model_compare_weighted\mobilenet_v3_large_history.csv
-efficientnet_b0,19,0.5713834961255392,0.8070175438596491,0.8036692100994743,4011391,85.84985930006951,0.7705937488935888,1.4733958721160887,models\three_model_compare_weighted\efficientnet_b0_best.pt,models\three_model_compare_weighted\efficientnet_b0_history.csv
