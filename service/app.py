@@ -866,20 +866,37 @@ def render_analysis_plot_png(session_id: str | None) -> bytes:
     timeline_x = [item["elapsed_sec"] for item in timeline]
     timeline_y = [item["y"] for item in timeline]
     timeline_colors = [item["color"] for item in timeline]
+    total_sec = max(float(analysis.get("total_analyzed_sec") or 0.0), timeline_x[-1] if timeline_x else 0.0)
+    timeline_step_x = [*timeline_x, total_sec]
+    timeline_step_y = [*timeline_y, timeline_y[-1]]
 
-    fig = plt.figure(figsize=(15, 7.5), constrained_layout=True)
-    grid = fig.add_gridspec(2, 2)
-    ax_timeline = fig.add_subplot(grid[0, :])
-    ax_duration = fig.add_subplot(grid[1, 0])
-    ax_probability = fig.add_subplot(grid[1, 1])
+    fig = plt.figure(figsize=(15, 10), constrained_layout=True)
+    grid = fig.add_gridspec(3, 1, height_ratios=[1, 1, 0.75])
+    ax_timeline = fig.add_subplot(grid[0, 0])
+    ax_probability = fig.add_subplot(grid[1, 0], sharex=ax_timeline)
+    ax_duration = fig.add_subplot(grid[2, 0])
 
-    ax_timeline.step(timeline_x, timeline_y, where="post", color="#1f77b4", linewidth=2)
+    ax_timeline.step(timeline_step_x, timeline_step_y, where="post", color="#1f77b4", linewidth=2)
     ax_timeline.scatter(timeline_x, timeline_y, c=timeline_colors, s=30, zorder=3)
     ax_timeline.set_title("상태 변화 타임라인")
-    ax_timeline.set_xlabel("경과 시간(초)")
     ax_timeline.set_yticks([item["y"] for item in timeline_order])
     ax_timeline.set_yticklabels([item["label"] for item in timeline_order])
     ax_timeline.grid(True, axis="x", alpha=0.25)
+    ax_timeline.set_xlim(0, total_sec)
+    ax_timeline.tick_params(labelbottom=False)
+
+    prob_x = [item["elapsed_sec"] for item in probability_lines]
+    prob_step_x = [*prob_x, total_sec]
+    ax_probability.step(prob_step_x, [*[item["Attentive"] for item in probability_lines], probability_lines[-1]["Attentive"]], where="post", label="집중", color=STATE_COLORS["Attentive"], linewidth=2)
+    ax_probability.step(prob_step_x, [*[item["Drowsy"] for item in probability_lines], probability_lines[-1]["Drowsy"]], where="post", label="졸음", color=STATE_COLORS["Drowsy"], linewidth=2)
+    ax_probability.step(prob_step_x, [*[item["LookingAway"] for item in probability_lines], probability_lines[-1]["LookingAway"]], where="post", label="시선 이탈", color=STATE_COLORS["LookingAway"], linewidth=2)
+    ax_probability.set_title("구간별 평균 확률")
+    ax_probability.set_xlabel("경과 시간(초)")
+    ax_probability.set_ylabel("확률")
+    ax_probability.set_ylim(0, 1)
+    ax_probability.set_xlim(0, total_sec)
+    ax_probability.grid(True, alpha=0.25)
+    ax_probability.legend(loc="upper right", ncols=3)
 
     bar_labels = [item["label"] for item in duration_bars]
     bar_durations = [item["duration_sec"] for item in duration_bars]
@@ -890,17 +907,6 @@ def render_analysis_plot_png(session_id: str | None) -> bytes:
     ax_duration.grid(True, axis="y", alpha=0.25)
     for index, value in enumerate(bar_durations):
         ax_duration.text(index, value, f"{value:.1f}s", ha="center", va="bottom")
-
-    prob_x = [item["elapsed_sec"] for item in probability_lines]
-    ax_probability.plot(prob_x, [item["Attentive"] for item in probability_lines], label="집중", color=STATE_COLORS["Attentive"], linewidth=2)
-    ax_probability.plot(prob_x, [item["Drowsy"] for item in probability_lines], label="졸음", color=STATE_COLORS["Drowsy"], linewidth=2)
-    ax_probability.plot(prob_x, [item["LookingAway"] for item in probability_lines], label="시선 이탈", color=STATE_COLORS["LookingAway"], linewidth=2)
-    ax_probability.set_title("구간별 평균 확률")
-    ax_probability.set_xlabel("경과 시간(초)")
-    ax_probability.set_ylabel("확률")
-    ax_probability.set_ylim(0, 1)
-    ax_probability.grid(True, alpha=0.25)
-    ax_probability.legend()
 
     title = f"Focus On Class 분석 - {analysis['session_id']}"
     fig.suptitle(title, fontsize=14)
