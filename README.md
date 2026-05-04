@@ -139,6 +139,8 @@ http://127.0.0.1:8000
 - `docs/report_compare1.md`: 후보 CNN 모델 비교 결과
 - `docs/model_selection_report.md`: 최종 서비스 모델 선정 근거
 - `docs/GUIDE.md`: 서비스 실행 및 동작 설명
+- `docs/project_structure_flow.md`: 프로젝트 구조도와 개발 흐름도
+- `docs/project_structure_flow.png`: 포트폴리오용 한 장짜리 구조도 이미지
 
 ## Repository Policy
 
