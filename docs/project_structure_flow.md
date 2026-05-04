@@ -108,34 +108,33 @@ flowchart TD
 ## 6. 최종 실행 파일 구조
 
 ```text
-focus_on_class
-├─ README.md
-├─ PROJECT_STRUCTURE_FLOW.md
-├─ worktrees/
-│  ├─ 0_prototype/
-│  ├─ 1_capture/
-│  ├─ 2_minicnn/
-│  ├─ 3_compare/
-│  ├─ 4_threshold/
-│  ├─ 5_service/
-│  │  ├─ service/
-│  │  │  ├─ app.py
-│  │  │  └─ GUIDE.md
-│  │  ├─ models/
-│  │  └─ mp_model/
-│  └─ develop/
-│     ├─ service/
-│     │  └─ app.py
-│     ├─ models/
-│     │  ├─ resnet18_best.pt
-│     │  ├─ mobilenet_v3_large_best.pt
-│     │  └─ efficientnet_b0_best.pt
-│     ├─ mp_model/
-│     │  └─ face_landmarker.task
-│     ├─ docs/
-│     ├─ pyproject.toml
-│     └─ uv.lock
-└─ docs/
+focus_on_class/
+  ├─ service/
+  │  ├─ app.py                  # 최종 서비스 실행 진입점
+  │  └─ GUIDE.md                # 서비스 설명 문서
+  │
+  ├─ models/
+  │  ├─ efficientnet_b0_best.pt # 현재 app.py가 실제로 로드하는 모델
+  │  ├─ mobilenet_v3_large_best.pt
+  │  └─ resnet18_best.pt
+  │
+  ├─ mp_model/
+  │  ├─ face_landmarker.task    # 현재 app.py가 실제로 쓰는 MediaPipe 얼굴 검출 모델
+  │  ├─ hand_landmarker.task    # 현재 서비스 실행에는 직접 사용 안 함
+  │  └─ pose_landmarker_full.task
+  │
+  ├─ pyproject.toml             # Python 의존성 정의
+  ├─ uv.lock                    # 고정된 의존성 잠금 파일
+  ├─ .venv/                     # 현재 로컬 가상환경
+  │
+  ├─ 1-3_capture2.ipynb         # 데이터 수집/얼굴 crop 실험
+  ├─ dataset_123_split.ipynb    # train/validation/test 분리
+  ├─ 1-7_compare.ipynb          # 모델 비교
+  ├─ 1-8_all_model_compare.ipynb
+  ├─ 2-1_three_model_compare.ipynb
+  │
+  ├─ docs/                      # 보고서/가이드 문서
+  └─ FINAL_REPORT.md            # 최종 보고서
 ```
 
 ## 7. 포트폴리오용 요약 흐름
